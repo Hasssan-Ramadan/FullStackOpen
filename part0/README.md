@@ -1,11 +1,12 @@
-# Part 0 Solutions
+## Part 0 - Exercises 0.1.-0.6.
 
-## 0.4: new note
-
-### Sequence Diagram:
-
-<img src="./new_note.png"/>
 <br/>
+
+### 0.4: new note
+
+###### Sequence diagram depicting the situation where the user creates a new note on [notes page](https://studies.cs.helsinki.fi/exampleapp/notes) by writing something into the text field and clicking the submit button.
+
+<img src="./images/new_note.png"/>
 
 <pre>
 <code> 
@@ -47,13 +48,13 @@ that renders notes to display
 end note
 </code>
 </pre>
-
-## 0.5: Single page app
-
-### Sequence Diagram:
-
-<img src="./spa.png"/>
 <br/>
+
+### 0.5: Single page app
+
+###### Sequence diagram depicting the situation where the user goes to the single page app version of the [notes app](https://studies.cs.helsinki.fi/exampleapp/spa).
+
+<img src="./images/spa.png"/>
 
 <pre>
 <code> 
@@ -76,5 +77,23 @@ note over browser:
 browser executes the event handler
 that renders notes to display
 end note
+</code>
+</pre>
+<br/>
+
+### 0.6: New note
+
+###### Sequence diagram depicting the situation where the user creates a new note using the single page version of the app.
+
+<img src="./images/new_note_spa.png"/>
+
+<pre>
+<code> 
+note over browser:
+when the user submit the form, the browser executes the
+event handler that append the new note to the DOM to
+display and send HTTP POST with new JSON file to the server
+end note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
 </code>
 </pre>
