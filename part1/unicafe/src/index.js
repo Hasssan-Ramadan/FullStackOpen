@@ -5,10 +5,14 @@ const Display = ({ text }) => <h1>{text}</h1>;
 
 const Button = ({ text, handler }) => <button onClick={handler}>{text}</button>;
 
-const Statistic = ({ text, value, persentage=""}) => (
-  <p>
-    {text} {value}{persentage}
-  </p>
+const Statistic = ({ text, value, persentage = "" }) => (
+  <tr>
+    <td>{text}</td>
+    <td>
+      {value}
+      {persentage}
+    </td>
+  </tr>
 );
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -21,14 +25,16 @@ const Statistics = ({ good, neutral, bad }) => {
   }
 
   return (
-    <>
-      <Statistic text="good" value={good} />
-      <Statistic text="neutral" value={neutral} />
-      <Statistic text="bad" value={bad} />
-      <Statistic text="all" value={all} />
-      <Statistic text="average" value={average} />
-      <Statistic text="positive" value={positive} persentage={"%"}/>
-    </>
+    <table>
+      <tbody>
+        <Statistic text="good" value={good} />
+        <Statistic text="neutral" value={neutral} />
+        <Statistic text="bad" value={bad} />
+        <Statistic text="all" value={all} />
+        <Statistic text="average" value={average} />
+        <Statistic text="positive" value={positive} persentage={"%"} />
+      </tbody>
+    </table>
   );
 };
 
