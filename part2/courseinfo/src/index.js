@@ -5,7 +5,7 @@ const Header = ({ name }) => {
   return <h1>{name}</h1>;
 };
 
-const Part = ({part}) => {
+const Part = ({ part }) => {
   return (
     <p>
       {part.name} {part.exercises}
@@ -23,11 +23,26 @@ const Content = ({ parts }) => {
   );
 };
 
+const Total = ({ parts }) => {
+  const partsExs = parts.map((part) => part.exercises);
+  const numOfExs = partsExs.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+
+  return (
+    <>
+      <p>Number of exercises {numOfExs}</p>
+    </>
+  );
+};
+
 const Course = ({ course }) => {
   return (
     <>
       <Header name={course.name} />
       <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </>
   );
 };
