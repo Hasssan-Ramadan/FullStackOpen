@@ -1,34 +1,72 @@
+import { useState } from 'react'
 const Result = ({ searchValue, countries }) => {
-  const MatchedCountries = countries.filter((country) =>
+  const matchedCountries = countries.filter((country) =>
     country.name.toLowerCase().includes(`${searchValue}`.toLowerCase())
   )
-  if (MatchedCountries.length > 10) return <p>too many countries</p>
-  else if (MatchedCountries.length <= 10 && MatchedCountries.length !== 1)
+  const [showCountry, setShowCountry] = useState()
+  const handleClick = (event) => {
+    console.log(event.target.value)
+    const matchedCountry = countries.filter((country) =>
+      country.name.toLowerCase().includes(event.target.value.toLowerCase())
+    )
+    console.log(event.target.value)
+    setShowCountry(...matchedCountry)
+  }
+  if (matchedCountries.length > 10) return <p>too many countries</p>
+  else if (matchedCountries.length <= 10 && matchedCountries.length !== 1)
     return (
       <>
         <ul>
-          {MatchedCountries.map((country) => (
-            <li key={country.name}>{country.name}</li>
+          {matchedCountries.map((country) => (
+            <li key={country.name}>
+              {country.name}
+              <button onClick={handleClick} value={country.name}>
+                show
+              </button>
+              {showCountry && country.name === showCountry.name ? (
+                <div>
+                  <h3>Name: {country.name}</h3>
+                  <h4>Capital: {country.capital}</h4>
+                  <p>Population: {country.population}</p>
+                  <p>
+                    Flag:{' '}
+                    <img
+                      style={{
+                        width: '200px',
+                        height: 'auto',
+                        display: 'block',
+                      }}
+                      src={country.flag}
+                      alt={country.name}
+                    />
+                  </p>
+                </div>
+              ) : null}
+            </li>
           ))}
         </ul>
       </>
     )
-  else if (MatchedCountries.length === 1)
+  else if (matchedCountries.length === 1)
     return (
       <>
-        <h1>{MatchedCountries[0].name}</h1>
-        <p>capital {MatchedCountries[0].capital}</p>
-        <p>population {MatchedCountries[0].population}</p>
+        <h1>{matchedCountries[0].name}</h1>
+        <p>capital {matchedCountries[0].capital}</p>
+        <p>population {matchedCountries[0].population}</p>
         <h2>languages</h2>
         <ul>
-          {MatchedCountries[0].languages.map((language) => (
+          {matchedCountries[0].languages.map((language) => (
             <li key={language.name}>{language.name}</li>
           ))}
         </ul>
         <img
-          src={MatchedCountries[0].flag}
-          alt={MatchedCountries[0].name}
-          style={{ height: '200px', width: '200px' }}
+          src={matchedCountries[0].flag}
+          alt={matchedCountries[0].name}
+          style={{
+            width: '200px',
+            height: 'auto',
+            display: 'block',
+          }}
         />
       </>
     )
