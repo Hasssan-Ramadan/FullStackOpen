@@ -23,7 +23,21 @@ const App = () => {
     }
     const personsNames = persons.map((person) => person.name)
     if (personsNames.includes(personObject.name)) {
-      alert(`${newName} is already added to phonebook`)
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace old number with the new one?`
+        )
+      ) {
+        Services.updatePerson(
+          persons.filter((person) => person.name === newName)[0].id,
+          personObject
+        ).then((newPerson) => {
+          const newPersons = persons
+            .filter((person) => person.name !== newPerson.name)
+            .concat(newPerson)
+          setPersons(newPersons)
+        })
+      }
     } else {
       Services.createNewPerson(personObject).then((newPerson) =>
         setPersons(persons.concat(newPerson))
