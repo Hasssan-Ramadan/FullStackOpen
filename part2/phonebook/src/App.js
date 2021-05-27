@@ -1,43 +1,45 @@
-import React, { useState } from "react";
-import Filter from "./components/Filter";
-import PersonForm from "./components/PersonForm";
-import Persons from "./components/Persons";
+import React, { useState, useEffect } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456" },
-    { name: "Ada Lovelace", number: "39-44-5323523" },
-    { name: "Dan Abramov", number: "12-43-234345" },
-    { name: "Mary Poppendieck", number: "39-23-6423122" },
-  ]);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [searchVal, setSearchVal] = useState("");
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [searchVal, setSearchVal] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then((Response) => setPersons(Response.data))
+  }, [])
 
   const addPerson = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     const personObject = {
       name: newName,
       number: newNumber,
-    };
-    const personsNames = persons.map((person) => person.name);
-    if (personsNames.includes(personObject.name)) {
-      alert(`${newName} is already added to phonebook`);
-    } else {
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
     }
-  };
+    const personsNames = persons.map((person) => person.name)
+    if (personsNames.includes(personObject.name)) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      setPersons(persons.concat(personObject))
+      setNewName('')
+      setNewNumber('')
+    }
+  }
   const handleNameChange = (event) => {
-    setNewName(event.target.value);
-  };
+    setNewName(event.target.value)
+  }
   const handleNumberChange = (event) => {
-    setNewNumber(event.target.value);
-  };
+    setNewNumber(event.target.value)
+  }
   const handleValChange = (event) => {
-    setSearchVal(event.target.value);
-  };
+    setSearchVal(event.target.value)
+  }
 
   return (
     <div>
@@ -54,7 +56,7 @@ const App = () => {
       <h2>Numbers</h2>
       <Persons persons={persons} searchVal={searchVal} />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
