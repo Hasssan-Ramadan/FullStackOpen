@@ -1,17 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 const Result = ({ searchValue, countries }) => {
   const matchedCountries = countries.filter((country) =>
     country.name.toLowerCase().includes(`${searchValue}`.toLowerCase())
   )
   const [showCountry, setShowCountry] = useState()
   const handleClick = (event) => {
-    console.log(event.target.value)
     const matchedCountry = countries.filter((country) =>
       country.name.toLowerCase().includes(event.target.value.toLowerCase())
     )
-    console.log(event.target.value)
     setShowCountry(...matchedCountry)
   }
+  const [weather, setWeather] = useState({})
+  useEffect(() => {
+    const api_key = process.env.REACT_APP_API_KEY
+    if (matchedCountries.length === 1) {
+      axios
+        .get(
+          `http://api.weatherstack.com/current?access_key=${api_key}&query=${matchedCountries[0].capital}`
+        )
+        .then((Response) => setWeather(Response.data.current))
+    }
+  }, [])
   if (matchedCountries.length > 10) return <p>too many countries</p>
   else if (matchedCountries.length <= 10 && matchedCountries.length !== 1)
     return (
@@ -68,6 +78,14 @@ const Result = ({ searchValue, countries }) => {
             display: 'block',
           }}
         />
+        <div>
+          <h4>Weather in {matchedCountries[0].capital}</h4>
+          <h5>temperature: {weather.temperature} Celisues</h5>
+          <img src={weather.weather_icons[0]} alt='' />
+          <h5>
+            wind: {weather.wind_degree} mph direction {weather.wind_dir}
+          </h5>
+        </div>
       </>
     )
 }
