@@ -11,4 +11,9 @@ const createNewPerson = (newPerson) => {
   return request.then((response) => response.data)
 }
 
-export default { getAllPersons, createNewPerson }
+const deletePerson = (id) => {
+  const request = axios.delete(`${resourceUrl}/${id}`)
+  return request.then((response) => response.data)
+}
+
+export default { getAllPersons, createNewPerson, deletePerson }

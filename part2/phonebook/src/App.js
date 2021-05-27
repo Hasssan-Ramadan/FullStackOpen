@@ -42,6 +42,15 @@ const App = () => {
     setSearchVal(event.target.value)
   }
 
+  const handleClick = (person) => {
+    if (window.confirm(`Do you really want to delete ${person.name}?`)) {
+      Services.deletePerson(person.id).then(() => {
+        const newPersons = persons.filter((p) => p.id !== person.id)
+        setPersons(newPersons)
+      })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -55,7 +64,11 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} searchVal={searchVal} />
+      <Persons
+        persons={persons}
+        searchVal={searchVal}
+        handleClick={handleClick}
+      />
     </div>
   )
 }
