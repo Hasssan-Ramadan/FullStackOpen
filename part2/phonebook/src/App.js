@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import Services from './services/requests'
 
 const App = () => {
@@ -9,6 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchVal, setSearchVal] = useState('')
+  const [message, setMessage] = useState('')
+  const [CssClass, setCssClass] = useState('')
 
   useEffect(
     () => Services.getAllPersons().then((persons) => setPersons(persons)),
@@ -31,17 +34,31 @@ const App = () => {
         Services.updatePerson(
           persons.filter((person) => person.name === newName)[0].id,
           personObject
-        ).then((newPerson) => {
-          const newPersons = persons
-            .filter((person) => person.name !== newPerson.name)
-            .concat(newPerson)
-          setPersons(newPersons)
-        })
+        )
+          .then((newPerson) => {
+            const newPersons = persons
+              .filter((person) => person.name !== newPerson.name)
+              .concat(newPerson)
+            setPersons(newPersons)
+          })
+          .then(() => {
+            setMessage('Old number updated with the new one successfully!')
+            setCssClass('success')
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
       }
     } else {
-      Services.createNewPerson(personObject).then((newPerson) =>
-        setPersons(persons.concat(newPerson))
-      )
+      Services.createNewPerson(personObject)
+        .then((newPerson) => setPersons(persons.concat(newPerson)))
+        .then(() => {
+          setMessage(`${personObject.name} has been added successfully!`)
+          setCssClass('success')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
     }
     setNewName('')
     setNewNumber('')
@@ -58,16 +75,25 @@ const App = () => {
 
   const handleClick = (person) => {
     if (window.confirm(`Do you really want to delete ${person.name}?`)) {
-      Services.deletePerson(person.id).then(() => {
-        const newPersons = persons.filter((p) => p.id !== person.id)
-        setPersons(newPersons)
-      })
+      Services.deletePerson(person.id)
+        .then(() => {
+          const newPersons = persons.filter((p) => p.id !== person.id)
+          setPersons(newPersons)
+        })
+        .then(() => {
+          setMessage(`${person.name} has been deleted successfully!`)
+          setCssClass('success')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} CssClass={CssClass} />
       <Filter searchVal={searchVal} handleValChange={handleValChange} />
       <h2>Add a new</h2>
       <PersonForm
