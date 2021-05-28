@@ -48,6 +48,15 @@ const App = () => {
               setMessage(null)
             }, 5000)
           })
+          .catch((error) => {
+            setMessage(
+              `Information of ${newName} has already been removed from the server.`
+            )
+            setCssClass('fail')
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
       }
     } else {
       Services.createNewPerson(personObject)
@@ -55,6 +64,13 @@ const App = () => {
         .then(() => {
           setMessage(`${personObject.name} has been added successfully!`)
           setCssClass('success')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
+        .catch((error) => {
+          setMessage(`Something went wrong while adding ${personObject.name}`)
+          setCssClass('fail')
           setTimeout(() => {
             setMessage(null)
           }, 5000)
@@ -83,6 +99,15 @@ const App = () => {
         .then(() => {
           setMessage(`${person.name} has been deleted successfully!`)
           setCssClass('success')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
+        .catch((error) => {
+          setMessage(
+            `Information of ${person.name} has already been removed from the server.`
+          )
+          setCssClass('fail')
           setTimeout(() => {
             setMessage(null)
           }, 5000)
