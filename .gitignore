@@ -105,3 +105,6 @@ dist
 
 # React Test
 test
+
+# Testing REST requests
+*.rest
