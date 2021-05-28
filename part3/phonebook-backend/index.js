@@ -49,11 +49,34 @@ app.delete('/api/persons/:id', (request, response) => {
   return response.status(204).end()
 })
 
+const generateId = () => {
+  return Math.max(...persons.map((person) => person.id)) + 1
+}
+
 app.use(express.json())
 
 app.post('/api/persons/', (request, response) => {
-  const person = request.body
-  person.id = Math.floor(Math.random() * 100)
+  if (!request.body.name) {
+    return response.status(400).json({
+      error: 'name missing',
+    })
+  }
+  if (!request.body.number) {
+    return response.status(400).json({
+      error: 'number missing',
+    })
+  }
+  if (persons.some((person) => person.name === request.body.name)) {
+    return response.status(400).json({
+      error: 'name must be unique',
+    })
+  }
+  const person = {
+    name: request.body.name,
+    number: request.body.number,
+    id: generateId(),
+  }
+
   persons = persons.concat(person)
   response.json(person)
 })
