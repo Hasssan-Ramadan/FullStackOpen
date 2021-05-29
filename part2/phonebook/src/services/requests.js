@@ -1,9 +1,13 @@
 import axios from 'axios'
-const resourceUrl = 'http://localhost:3001/persons'
+const resourceUrl = 'http://localhost:3001/api/persons'
 
 const getAllPersons = () => {
   const request = axios.get(resourceUrl)
-  return request.then((response) => response.data)
+
+  return request.then((response) => {
+    console.log(response.data)
+    return response.data
+  })
 }
 
 const createNewPerson = (newPerson) => {
