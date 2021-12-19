@@ -13,28 +13,28 @@ const url = `mongodb+srv://rmdanjr:${password}@cluster0.qy9q8.mongodb.net/phoneb
 
 mongoose.connect(url)
 
-const phoneSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
   name: String,
   number: String,
 })
 
-const Phone = mongoose.model('Phone', phoneSchema)
+const Person = mongoose.model('Person', personSchema)
 
 if (process.argv.length >= 5) {
-  const phone = new Phone({
+  const person = new Person({
     name: process.argv[3],
     number: process.argv[4],
   })
 
-  phone.save().then((phone) => {
-    console.log(`added ${phone.name} number ${phone.number} to phonebook`)
+  person.save().then((person) => {
+    console.log(`added ${person.name} number ${person.number} to phonebook`)
     mongoose.connection.close()
   })
 } else {
-  console.log("phonebook:")
-  Phone.find({}).then((phonebook) => {
-    phonebook.forEach((phone) => {
-      console.log(`${phone.name} ${phone.number}`)
+  console.log('phonebook:')
+  Person.find({}).then((persons) => {
+    persons.forEach((person) => {
+      console.log(`${person.name} ${person.number}`)
     })
     mongoose.connection.close()
   })
