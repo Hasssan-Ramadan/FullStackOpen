@@ -14,7 +14,7 @@ const App = () => {
   const [CssClass, setCssClass] = useState('')
 
   useEffect(
-    () => Services.getAllPersons().then((persons) => setPersons(persons)),
+    () => Services.getAllPersons().then((response) => setPersons(response.data)),
     []
   )
 
@@ -35,10 +35,10 @@ const App = () => {
           persons.filter((person) => person.name === newName)[0].id,
           personObject
         )
-          .then((newPerson) => {
+          .then((response) => {
             const newPersons = persons
-              .filter((person) => person.name !== newPerson.name)
-              .concat(newPerson)
+              .filter((person) => person.name !== response.data.name)
+              .concat(response.data)
             setPersons(newPersons)
           })
           .then(() => {
@@ -60,8 +60,8 @@ const App = () => {
       }
     } else {
       Services.createNewPerson(personObject)
-        .then((newPerson) => setPersons(persons.concat(newPerson)))
-        .then(() => {
+        .then((response) => {
+          setPersons(persons.concat(response.data))
           setMessage(`${personObject.name} has been added successfully!`)
           setCssClass('success')
           setTimeout(() => {
@@ -69,7 +69,7 @@ const App = () => {
           }, 5000)
         })
         .catch((error) => {
-          setMessage(`Something went wrong while adding ${personObject.name}`)
+          setMessage(error.response.data.error)
           setCssClass('fail')
           setTimeout(() => {
             setMessage(null)
