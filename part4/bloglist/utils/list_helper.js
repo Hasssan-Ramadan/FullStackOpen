@@ -26,7 +26,6 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  if (blogs.length === 0) return {}
   let returnedObj = { author: '', blogs: 0 }
   authorBlogsMap = new Map()
   blogs.forEach((blog) =>
@@ -44,5 +43,22 @@ const mostBlogs = (blogs) => {
   return returnedObj
 }
 
+const mostLikes = (blogs) => {
+  let returnedObj = { author: '', likes: 0 }
+  const authorLikesMap = new Map()
+  blogs.forEach((blog) =>
+    authorLikesMap.set(
+      blog.author,
+      (authorLikesMap.get(blog.author) ? authorLikesMap.get(blog.author) : 0) +
+        blog.likes
+    )
+  )
+  for (const [author, blogsLikes] of authorLikesMap)
+    if (blogsLikes > returnedObj.likes) {
+      returnedObj.author = author
+      returnedObj.likes = blogsLikes
+    }
+  return returnedObj
+}
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }
