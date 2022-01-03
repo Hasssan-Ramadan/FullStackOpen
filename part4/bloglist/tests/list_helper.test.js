@@ -1,4 +1,9 @@
-const { dummy, totalLikes, favoriteBlog } = require('../utils/list_helper')
+const {
+  dummy,
+  totalLikes,
+  favoriteBlog,
+  mostBlogs,
+} = require('../utils/list_helper')
 
 const oneBlogList = [
   {
@@ -139,6 +144,35 @@ describe('favorite blog', () => {
     }
 
     const result = favoriteBlog(bigList)
+    expect(result).toEqual(expectedResult)
+  })
+})
+
+describe('most blogs', () => {
+  test('of empty list is object with empty properties', () => {
+    const blogs = []
+    const expectedResult = {}
+    const result = favoriteBlog(blogs)
+    expect(result).toEqual(expectedResult)
+  })
+
+  test('when list has only one blog, is the object with that blog author', () => {
+    const expectedResult = {
+      author: 'Edsger W. Dijkstra',
+      blogs: 1,
+    }
+
+    const result = mostBlogs(oneBlogList)
+    expect(result).toEqual(expectedResult)
+  })
+
+  test('of a bigger list, is object with the author have the highest number of blogs', () => {
+    const expectedResult = {
+      author: 'Edsger W. Dijkstra',
+      blogs: 8,
+    }
+
+    const result = mostBlogs(bigList)
     expect(result).toEqual(expectedResult)
   })
 })
