@@ -4,12 +4,14 @@
   "description": "Blog list application allows users to save information about interesting blogs they have stumbled across on the internet. For each listed blog we will save the author, title, url, and amount of upvotes from users of the application.",
   "main": "index.js",
   "scripts": {
+    "test": "jest --verbose",
     "dev": "nodemon index.js"
   },
   "author": "Hassan Ramadan",
   "license": "ISC",
   "devDependencies": {
     "dotenv": "^10.0.0",
+    "jest": "^27.4.5",
     "nodemon": "^2.0.15"
   }
 }
