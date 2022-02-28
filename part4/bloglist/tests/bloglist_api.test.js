@@ -1,4 +1,3 @@
-const { response } = require('express')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
@@ -145,6 +144,15 @@ describe('Test HTTP POST /api/blogs', () => {
 
     const response = await api.get('/api/blogs/')
     expect(response.body[response.body.length - 1].likes).toEqual(0)
+  })
+
+  test('missing url and title properties => 400 Bad Request', async () => {
+    const newBlog = {
+      author: 'Hassan Ramadan',
+      likes: 43,
+    }
+
+    await api.post('/api/blogs').send(newBlog).expect(400)
   })
 })
 
