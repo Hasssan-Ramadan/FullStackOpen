@@ -94,11 +94,16 @@ describe('Test HTTP GET /api/blogs', () => {
     expect(response.body).toHaveLength(initialBlogs.length)
   })
 
-  test(' returned data is in json format', async () => {
+  test('returned data is in json format', async () => {
     await api
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/)
+  })
+
+  test('verifies that the unique identifier property of the blog posts is named id', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
   })
 })
 
