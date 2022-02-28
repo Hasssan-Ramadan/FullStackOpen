@@ -1,3 +1,4 @@
+const { response } = require('express')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
@@ -127,6 +128,23 @@ describe('Test HTTP POST /api/blogs', () => {
 
     expect(response.body).toHaveLength(initialBlogs.length + 1)
     expect(titles).toContain('our hashcode code haha!')
+  })
+
+  test('missing likes property default is 0', async () => {
+    const newBlog = {
+      title: 'our hashcode code haha!',
+      author: 'Hassan Ramadan',
+      url: 'https://github.com/rmdanjr/google-hashcode',
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs/')
+    expect(response.body[response.body.length - 1].likes).toEqual(0)
   })
 })
 
