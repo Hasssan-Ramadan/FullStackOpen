@@ -107,6 +107,29 @@ describe('Test HTTP GET /api/blogs', () => {
   })
 })
 
+describe('Test HTTP POST /api/blogs', () => {
+  test('a valid blog can be added', async () => {
+    const newBlog = {
+      title: 'our hashcode code haha!',
+      author: 'Hassan Ramadan',
+      url: 'https://github.com/rmdanjr/google-hashcode',
+      likes: 41,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    const titles = response.body.map((r) => r.title)
+
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(titles).toContain('our hashcode code haha!')
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
