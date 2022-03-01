@@ -156,6 +156,19 @@ describe('Test HTTP POST /api/blogs', () => {
   })
 })
 
+describe('Test HTTP DELETE /api/blogs/:id', () => {
+  test('an existing blog can be deleted', async () => {
+    const id = '493119960a439565123c06e7'
+    await api.delete(`/api/blogs/${id}`).expect(204)
+
+    const response = await api.get('/api/blogs')
+    const ids = response.body.map((blog) => blog.id)
+
+    expect(response.body).toHaveLength(initialBlogs.length - 1)
+    expect(ids).not.toContain(id)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
