@@ -169,6 +169,19 @@ describe('Test HTTP DELETE /api/blogs/:id', () => {
   })
 })
 
+describe('Test HTTP PUT /api/blogs/:id', () => {
+  test('an existing blog can be updated', async () => {
+    const id = '5a422aa71b56a676234d17f8'
+    const updatedBlog = {
+      id: '5a422aa71b56a676234d17f8',
+      title: 'our kick start code haha!',
+      author: 'Hassona',
+      url: 'https://github.com/rmdanjr/google-kickstart',
+    }
+    await api.put(`/api/blogs/${id}`).send(updatedBlog).expect(204)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
