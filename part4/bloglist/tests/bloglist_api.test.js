@@ -4,66 +4,11 @@ const app = require('../app')
 
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const initialBlogs = [
   {
     _id: '5a422aa71b54a676234d17fb',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0,
-  },
-  {
-    _id: '5a422ba71b54a676234d17f8',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0,
-  },
-  {
-    _id: '5a422aa71b5ba676234d17f8',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0,
-  },
-  {
-    _id: '5a422aa71b54a67623fd17f8',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0,
-  },
-  {
-    _id: '5a422aa71b54a676e34d17f8',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0,
-  },
-  {
-    _id: '5a422aae1b54a676234d17f8',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0,
-  },
-  {
-    _id: '5a422aa71b54a676234717f8',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0,
-  },
-  {
-    _id: '5a422aa71b56a676234d17f8',
     title: 'Go To Statement Considered Harmful',
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
@@ -80,17 +25,30 @@ const initialBlogs = [
   },
 ]
 
+const initialUsers = [
+  {
+    name: 'Hassan Ramadan',
+    username: 'RmdanJr',
+    password: 'MyPassword',
+  },
+]
+
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
   initialBlogs.forEach(async (blog) => {
-    let blogObject = new Blog(blog)
+    const blogObject = new Blog(blog)
     await blogObject.save()
+  })
+  initialUsers.forEach(async (user) => {
+    const userObject = new User(user)
+    await userObject.save()
   })
 })
 
 describe('Test HTTP GET /api/blogs', () => {
   test('all blogs are returned', async () => {
-    let response = await api.get('/api/blogs')
+    const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(initialBlogs.length)
   })
 
@@ -171,14 +129,97 @@ describe('Test HTTP DELETE /api/blogs/:id', () => {
 
 describe('Test HTTP PUT /api/blogs/:id', () => {
   test('an existing blog can be updated', async () => {
-    const id = '5a422aa71b56a676234d17f8'
+    const id = '493119960a439565123c06e7'
     const updatedBlog = {
-      id: '5a422aa71b56a676234d17f8',
+      id: '493119960a439565123c06e7',
       title: 'our kick start code haha!',
       author: 'Hassona',
       url: 'https://github.com/rmdanjr/google-kickstart',
     }
     await api.put(`/api/blogs/${id}`).send(updatedBlog).expect(204)
+  })
+})
+
+describe('Test HTTP POST /api/users', () => {
+  test('a vaild user can be added', async () => {
+    const user = {
+      name: 'Ahmed Fathy',
+      username: 'Jamaika',
+      password: 'undefined',
+    }
+    await api.post('/api/users/').send(user).expect(201)
+
+    const response = await api.get('/api/users/')
+    expect(response.body.length).toEqual(initialUsers.length + 1)
+  })
+
+  test("user without username cann't be added", async () => {
+    const user = {
+      name: 'Ahmed Fathy',
+      password: 'undefined',
+    }
+    let response = await api.post('/api/users/').send(user).expect(403)
+    expect(response.body.error).toEqual(
+      'username or password undefined or less than 3 chars length'
+    )
+
+    response = await api.get('/api/users/')
+    expect(response.body.length).toEqual(initialUsers.length)
+  })
+
+  test("user without password cann't be added", async () => {
+    const user = {
+      name: 'Ahmed Fathy',
+      username: 'Jamaika',
+    }
+    let response = await api.post('/api/users/').send(user).expect(403)
+    expect(response.body.error).toEqual(
+      'username or password undefined or less than 3 chars length'
+    )
+
+    response = await api.get('/api/users/')
+    expect(response.body.length).toEqual(initialUsers.length)
+  })
+
+  test("user whose username is less than 3 chars length cann't be added", async () => {
+    const user = {
+      name: 'Ahmed Fathy',
+      username: 'Ja',
+    }
+    let response = await api.post('/api/users/').send(user).expect(403)
+    expect(response.body.error).toEqual(
+      'username or password undefined or less than 3 chars length'
+    )
+
+    response = await api.get('/api/users/')
+    expect(response.body.length).toEqual(initialUsers.length)
+  })
+
+  test("user whose password is less than 3 chars length cann't be added", async () => {
+    const user = {
+      name: 'Ahmed Fathy',
+      password: 'u',
+    }
+    let response = await api.post('/api/users/').send(user).expect(403)
+    expect(response.body.error).toEqual(
+      'username or password undefined or less than 3 chars length'
+    )
+
+    response = await api.get('/api/users/')
+    expect(response.body.length).toEqual(initialUsers.length)
+  })
+
+  test("user whose username is already exists cann't be added", async () => {
+    const user = {
+      name: 'Hassan Ramadan',
+      username: 'RmdanJr',
+      password: 'undefined',
+    }
+    let response = await api.post('/api/users/').send(user).expect(403)
+    expect(response.body.error).toEqual('username already exist')
+
+    response = await api.get('/api/users/')
+    expect(response.body.length).toEqual(initialUsers.length)
   })
 })
 
