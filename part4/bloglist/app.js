@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
+
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
@@ -11,6 +12,9 @@ const loginRouter = require('./controllers/login')
 const app = express()
 
 mongoose.connect(MONGODB_URL)
+
+const tokenExtractor = require('./utils/tokenExtractor')
+app.use(tokenExtractor)
 
 app.use(cors())
 app.use(express.json())
