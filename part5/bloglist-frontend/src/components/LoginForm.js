@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const LoginForm = ({
   handleLogin,
@@ -11,23 +11,23 @@ const LoginForm = ({
     <div>
       username
       <input
-        type='text'
+        type="text"
         value={username}
-        name='Username'
+        name="Username"
         onChange={({ target }) => setUsername(target.value)}
       />
     </div>
     <div>
       password
       <input
-        type='password'
+        type="password"
         value={password}
-        name='Password'
+        name="Password"
         onChange={({ target }) => setPassword(target.value)}
       />
     </div>
-    <button type='submit'>login</button>
+    <button type="submit">login</button>
   </form>
-)
+);
 
-export default LoginForm
+export default LoginForm;
