@@ -105,6 +105,29 @@ const App = () => {
     }
   };
 
+  const removeBlog = async (BlogToDelete) => {
+    const confirmed = window.confirm(
+      `You requested to remove ${BlogToDelete.title} by ${BlogToDelete.author}. Are you sure?`
+    );
+    if (confirmed) {
+      try {
+        await blogService.remove(BlogToDelete.id);
+        getAllBlogs();
+        setSuccessMessage(
+          `Blog ${BlogToDelete.title} was successfully deleted`
+        );
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 5000);
+      } catch (exception) {
+        setErrorMessage(`Can't remove blog ${BlogToDelete.title}`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
+      }
+    }
+  };
+
   return (
     <div>
       <h2>Blogs</h2>
@@ -141,7 +164,12 @@ const App = () => {
           </Togglable>
 
           {allBlogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              user={user}
+              removeBlog={removeBlog}
+            />
           ))}
         </div>
       )}

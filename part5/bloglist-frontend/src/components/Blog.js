@@ -28,9 +28,14 @@ const Blog = (props) => {
         <p>{blog.url}</p>
         <p>
           likes {blog.likes}
-          <button onClick={() => setBlog({...blog, likes: blog.likes + 1})}>like</button>
+          <button onClick={() => setBlog({ ...blog, likes: blog.likes + 1 })}>
+            like
+          </button>
         </p>
         <p>{blog.user.name}</p>
+        {props.user.id === blog.user.id && (
+          <button onClick={() => props.removeBlog(blog)}> remove </button>
+        )}
       </div>
     </div>
   );

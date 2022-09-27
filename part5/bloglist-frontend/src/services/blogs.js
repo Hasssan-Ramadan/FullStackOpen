@@ -12,7 +12,7 @@ const getAll = async () => {
     headers: { Authorization: token },
   };
   const response = await axios.get(baseUrl, config);
-  return response.data.sort((a, b) => (b.likes - a.likes));
+  return response.data.sort((a, b) => b.likes - a.likes);
 };
 
 const create = async (newBlog) => {
@@ -22,6 +22,14 @@ const create = async (newBlog) => {
 
   const response = await axios.post(baseUrl, newBlog, config);
   return response.data;
+};
+
+const remove = async (blogId) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.delete(`${baseUrl}/${blogId}`, config);
+  return response;
 };
 
 const update = async (blog) => {
@@ -43,4 +51,4 @@ const update = async (blog) => {
   return response.data;
 };
 
-export default { getAll, create, update, setToken };
+export default { getAll, create, remove, update, setToken };
