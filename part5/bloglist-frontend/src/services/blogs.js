@@ -15,13 +15,32 @@ const getAll = async () => {
   return response.data;
 };
 
-const create = async (newObject) => {
+const create = async (newBlog) => {
   const config = {
     headers: { Authorization: token },
   };
 
-  const response = await axios.post(baseUrl, newObject, config);
+  const response = await axios.post(baseUrl, newBlog, config);
   return response.data;
 };
 
-export default { getAll, create, setToken };
+const update = async (blog) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const updatedBlog = {
+    user: blog.user.id,
+    likes: blog.likes,
+    author: blog.author,
+    title: blog.title,
+    url: blog.url,
+  };
+  const response = await axios.put(
+    `${baseUrl}/${blog.id}`,
+    updatedBlog,
+    config
+  );
+  return response.data;
+};
+
+export default { getAll, create, update, setToken };

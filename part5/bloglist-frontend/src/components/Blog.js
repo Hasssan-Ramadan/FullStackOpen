@@ -1,7 +1,13 @@
-import React, { useState } from "react";
-
-const Blog = ({ blog }) => {
+import React, { useEffect, useState } from "react";
+import blogsService from "../services/blogs";
+const Blog = (props) => {
   const [view, setView] = useState(false);
+  const [blog, setBlog] = useState(props.blog);
+
+  useEffect(() => {
+    blogsService.update(blog);
+  }, [blog]);
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,7 +27,8 @@ const Blog = ({ blog }) => {
       <div style={{ display: view ? "block" : "none" }}>
         <p>{blog.url}</p>
         <p>
-          likes {blog.likes} <button>like</button>
+          likes {blog.likes}
+          <button onClick={() => setBlog({...blog, likes: blog.likes + 1})}>like</button>
         </p>
         <p>{blog.user.name}</p>
       </div>
