@@ -12,7 +12,7 @@ const getAll = async () => {
     headers: { Authorization: token },
   };
   const response = await axios.get(baseUrl, config);
-  return response.data;
+  return response.data.sort((a, b) => (b.likes - a.likes));
 };
 
 const create = async (newBlog) => {
