@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const BlogForm = ({
   onSubmit,
@@ -22,10 +22,10 @@ const BlogForm = ({
         Url: <input value={newUrl} onChange={handleUrlChange} />
       </div>
       <div>
-        <button type="submit">add</button>
+        <button type='submit'>add</button>
       </div>
     </form>
   </>
-);
+)
 
-export default BlogForm;
+export default BlogForm

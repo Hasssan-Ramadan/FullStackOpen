@@ -5,8 +5,8 @@ const Blog = (props) => {
   const [blog, setBlog] = useState(props.blog)
 
   useEffect(() => {
-    blogsService.update(blog);
-  }, [blog]);
+    blogsService.update(blog)
+  }, [blog])
 
   const blogStyle = {
     paddingTop: 10,
