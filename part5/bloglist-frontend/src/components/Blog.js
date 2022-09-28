@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import blogsService from "../services/blogs";
+import React, { useEffect, useState } from 'react'
+import blogsService from '../services/blogs'
 const Blog = (props) => {
-  const [view, setView] = useState(false);
-  const [blog, setBlog] = useState(props.blog);
+  const [view, setView] = useState(false)
+  const [blog, setBlog] = useState(props.blog)
 
   useEffect(() => {
     blogsService.update(blog);
@@ -11,20 +11,20 @@ const Blog = (props) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
 
-  const toggleView = () => setView(!view);
+  const toggleView = () => setView(!view)
 
   return (
     <div style={blogStyle}>
       <p>
         {blog.title} - {blog.author}
-        <button onClick={toggleView}>{view ? "hide" : "view"}</button>
+        <button onClick={toggleView}>{view ? 'hide' : 'view'}</button>
       </p>
-      <div style={{ display: view ? "block" : "none" }}>
+      <div style={{ display: view ? 'block' : 'none' }}>
         <p>{blog.url}</p>
         <p>
           likes {blog.likes}
@@ -34,10 +34,10 @@ const Blog = (props) => {
         </p>
         <p>{blog.user.name}</p>
         {props.user.id === blog.user.id && (
-          <button onClick={() => props.removeBlog(blog)}> remove </button>
+          <button onClick={() => props.removeBlog(blog)}>remove</button>
         )}
       </div>
     </div>
-  );
-};
-export default Blog;
+  )
+}
+export default Blog
