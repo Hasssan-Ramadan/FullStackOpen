@@ -11,7 +11,7 @@ const BlogForm = ({
 }) => (
   <>
     <h2>Add new blog</h2>
-    <form onSubmit={onSubmit}>
+    <form id='blog-form' onSubmit={onSubmit}>
       <div>
         Title: <input value={newTitle} onChange={handleTitleChange} />
       </div>

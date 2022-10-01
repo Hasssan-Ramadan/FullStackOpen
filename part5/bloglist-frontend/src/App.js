@@ -160,15 +160,16 @@ const App = () => {
               handleUrlChange={handleUrlChange}
             />
           </Togglable>
-
-          {allBlogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              user={user}
-              removeBlog={removeBlog}
-            />
-          ))}
+          <div id='blog-list'>
+            {allBlogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                user={user}
+                removeBlog={removeBlog}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>

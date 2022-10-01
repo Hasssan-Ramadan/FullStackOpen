@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-import userService from '../../src/services/users'
-
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -32,6 +29,29 @@ describe('Blog app', function () {
       cy.get('#login-btn').click()
       cy.contains('Hassan Ramadan logged in').should('not.exist')
       cy.get('#notification').should('have.css', 'color', 'rgb(255, 0, 0)')
+    })
+  })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.request('POST', 'http://localhost:3003/api/login', {
+        username: 'RmdanJr',
+        password: 'RmdanJrPass',
+      }).then((res) => {
+        localStorage.setItem('loggedBlogappUser', JSON.stringify(res.body))
+        cy.visit('http://localhost:3000')
+      })
+    })
+
+    it('A blog can be created', function () {
+      cy.contains('add blog').click()
+      cy.get('#blog-form').contains('Title').find('input').type('new title')
+      cy.get('#blog-form').contains('Author').find('input').type('new author')
+      cy.get('#blog-form').contains('Url').find('input').type('new url')
+      cy.get('#blog-form').contains('add').click()
+      cy.get('#blog-list').contains('new title')
+      cy.get('#blog-list').contains('new author')
+      cy.get('#blog-list').contains('new url')
     })
   })
 })
