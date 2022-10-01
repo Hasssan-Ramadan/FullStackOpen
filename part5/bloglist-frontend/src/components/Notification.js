@@ -23,10 +23,12 @@ const success = {
 const Notification = ({ errorMessage, successMessage }) => {
   if (successMessage === null && errorMessage === null) {
     return null
-  } else if (successMessage) {
-    return <div style={success}>{successMessage}</div>
   } else {
-    return <div style={error}>{errorMessage}</div>
+    return (
+      <div id='notification' style={successMessage ? success : error}>
+        {successMessage || errorMessage}
+      </div>
+    )
   }
 }
 
