@@ -22,13 +22,18 @@ const Blog = (props) => {
     <div style={blogStyle}>
       <p>
         {blog.title} - {blog.author}
-        <button onClick={toggleView}>{view ? 'hide' : 'view'}</button>
+        <button className='view-btn' onClick={toggleView}>
+          {view ? 'hide' : 'view'}
+        </button>
       </p>
       <div style={{ display: view ? 'block' : 'none' }}>
         <p>{blog.url}</p>
         <p>
-          likes {blog.likes}
-          <button onClick={() => setBlog({ ...blog, likes: blog.likes + 1 })}>
+          likes <span className='likes-num'>{blog.likes}</span>
+          <button
+            className='like-btn'
+            onClick={() => setBlog({ ...blog, likes: blog.likes + 1 })}
+          >
             like
           </button>
         </p>

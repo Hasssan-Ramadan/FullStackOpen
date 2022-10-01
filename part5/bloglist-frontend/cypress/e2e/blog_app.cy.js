@@ -53,5 +53,33 @@ describe('Blog app', function () {
       cy.get('#blog-list').contains('new author')
       cy.get('#blog-list').contains('new url')
     })
+
+    describe('When have a blog', function () {
+      beforeEach(function () {
+        const user = JSON.parse(localStorage.getItem('loggedBlogappUser'))
+        cy.request({
+          url: 'http://localhost:3003/api/blogs',
+          method: 'POST',
+          headers: { Authorization: `bearer ${user.token}` },
+          body: {
+            title: 'new title',
+            author: 'new author',
+            url: 'new url',
+          },
+        }).then((res) => {
+          cy.visit('http://localhost:3000')
+        })
+      })
+
+      it('user can like blog', function () {
+        cy.get('.view-btn').click()
+        cy.get('.like-btn').click().click()
+        cy.get('.likes-num')
+          .invoke('text')
+          .then((text) => {
+            expect(text.trim()).equal('2')
+          })
+      })
+    })
   })
 })
