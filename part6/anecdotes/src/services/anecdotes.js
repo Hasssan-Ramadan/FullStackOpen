@@ -12,3 +12,15 @@ export const createOne = async (newAnecdote) => {
   )
   return response.data
 }
+
+export const voteOne = async (anecdoteBeforeVote) => {
+  const votedAnecdote = {
+    ...anecdoteBeforeVote,
+    votes: anecdoteBeforeVote.votes + 1,
+  }
+  const response = await axios.put(
+    `http://localhost:3001/anecdotes/${anecdoteBeforeVote.id}`,
+    votedAnecdote
+  )
+  return response.data
+}
