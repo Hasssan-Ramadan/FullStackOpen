@@ -21,14 +21,18 @@ const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
   if (action.type === 'VOTE_ANECDOTE')
-    return state.map((anecdote) =>
-      anecdote.id === action.payload.id
-        ? { ...anecdote, votes: anecdote.votes + 1 }
-        : anecdote
-    )
+    return state
+      .map((anecdote) =>
+        anecdote.id === action.payload.id
+          ? { ...anecdote, votes: anecdote.votes + 1 }
+          : anecdote
+      )
+      .sort((a, b) => b.votes - a.votes)
   else if (action.type === 'CREATE_ANECDOTE')
-    return state.concat(asObject(action.payload.content))
-  return state
+    return state
+      .concat(asObject(action.payload.content))
+      .sort((a, b) => b.votes - a.votes)
+  return state.sort((a, b) => b.votes - a.votes)
 }
 
 export default reducer
