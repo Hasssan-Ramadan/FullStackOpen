@@ -26,6 +26,8 @@ const reducer = (state = initialState, action) => {
         ? { ...anecdote, votes: anecdote.votes + 1 }
         : anecdote
     )
+  else if (action.type === 'CREATE_ANECDOTE')
+    return state.concat(asObject(action.payload.content))
   return state
 }
 
