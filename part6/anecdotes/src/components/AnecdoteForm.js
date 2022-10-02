@@ -1,8 +1,7 @@
 import { useDispatch } from 'react-redux'
+import { createAnecdote } from '../reducers/anecdoteReducer'
 
-import { create } from '../reducers/anecdoteReducer'
 import { display } from '../reducers/notificationReducer'
-import { createOne } from '../services/anecdotes'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -10,10 +9,8 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const anecdoteContent = event.target.anecdote.value
     if (anecdoteContent) {
-      createOne({ content: anecdoteContent, votes: 0 }).then((anecdote) => {
-        dispatch(create(anecdote))
-        dispatch(display(`you created '${anecdoteContent}'`))
-      })
+      dispatch(createAnecdote({ content: anecdoteContent, votes: 0 }))
+      dispatch(display(`you created '${anecdoteContent}'`))
     }
     event.target.anecdote.value = ''
   }
