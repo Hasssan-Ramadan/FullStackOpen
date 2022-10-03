@@ -1,30 +1,35 @@
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 
 import { voteAnecdote, intiializeAnecdotes } from '../reducers/anecdoteReducer'
-import { display } from '../reducers/notificationReducer'
+import { display, remove } from '../reducers/notificationReducer'
+import { update } from '../reducers/timerIdReducer'
 
-const AnecdoteList = () => {
-  const anecdotes = useSelector((state) => state.anecdotes)
-  const searchTerm = useSelector((state) => state.searchTerm)
-  const filteredAnecdotes = anecdotes.filter((anecdote) =>
-    anecdote.content.includes(searchTerm)
-  )
-
-  const dispatch = useDispatch()
+const AnecdoteList = ({
+  anecdotes,
+  timerId,
+  voteAnecdote,
+  intiializeAnecdotes,
+  display,
+  remove,
+  update,
+}) => {
   const voteAnecdoteHandler = (anecdote) => {
-    dispatch(voteAnecdote(anecdote))
-    dispatch(display(`you voted '${anecdote.content}'`))
+    voteAnecdote(anecdote)
+    display(`you voted '${anecdote.content}'`)
+    const notifyTimerId = setTimeout(() => remove(), 5000)
+    clearTimeout(timerId)
+    update(notifyTimerId)
   }
 
   useEffect(() => {
-    dispatch(intiializeAnecdotes())
-  }, [dispatch])
+    intiializeAnecdotes()
+  }, [intiializeAnecdotes])
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {filteredAnecdotes.map((anecdote) => (
+      {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
@@ -37,4 +42,14 @@ const AnecdoteList = () => {
   )
 }
 
-export default AnecdoteList
+export default connect(
+  (state) => {
+    return {
+      anecdotes: state.anecdotes.filter((anecdote) =>
+        anecdote.content.includes(state.searchTerm)
+      ),
+      timerId: state.timerId,
+    }
+  },
+  { voteAnecdote, intiializeAnecdotes, display, update, remove }
+)(AnecdoteList)

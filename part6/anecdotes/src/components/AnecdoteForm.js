@@ -1,16 +1,19 @@
-import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 
-import { display } from '../reducers/notificationReducer'
+import { display, remove } from '../reducers/notificationReducer'
+import { update } from '../reducers/timerIdReducer'
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch()
+const AnecdoteForm = ({ timerId, createAnecdote, display, remove, update }) => {
   const createAnecdoteHandler = (event) => {
     event.preventDefault()
     const anecdoteContent = event.target.anecdote.value
     if (anecdoteContent) {
-      dispatch(createAnecdote({ content: anecdoteContent, votes: 0 }))
-      dispatch(display(`you created '${anecdoteContent}'`))
+      createAnecdote({ content: anecdoteContent, votes: 0 })
+      display(`you created '${anecdoteContent}'`)
+      const notifyTimerId = setTimeout(() => remove(), 5000)
+      clearTimeout(timerId)
+      update(notifyTimerId)
     }
     event.target.anecdote.value = ''
   }
@@ -28,4 +31,9 @@ const AnecdoteForm = () => {
   )
 }
 
-export default AnecdoteForm
+export default connect(
+  (state) => {
+    return { timerId: state.timerId }
+  },
+  { createAnecdote, display, update, remove }
+)(AnecdoteForm)

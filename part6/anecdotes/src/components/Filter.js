@@ -1,11 +1,8 @@
-import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { update } from '../reducers/searchTermReducer'
 
-const Filter = () => {
-  const dispatch = useDispatch()
-  const handleChange = (event) => {
-    dispatch(update(event.target.value))
-  }
+const Filter = ({ update }) => {
+  const handleChange = (event) => update(event.target.value)
 
   const style = {
     marginBottom: 10,
@@ -18,4 +15,4 @@ const Filter = () => {
   )
 }
 
-export default Filter
+export default connect(null, { update })(Filter)
