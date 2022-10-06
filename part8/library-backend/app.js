@@ -131,7 +131,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: (_, args) => {
-      const bookToSave = { id: uuid, ...args }
+      const bookToSave = { id: uuid(), ...args }
       books.push(bookToSave)
       if (!authors.find((author) => author.name === bookToSave.author))
         authors.push({ id: uuid(), name: bookToSave.author })
