@@ -1,11 +1,7 @@
-import { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { EDIT_AUTHOR, GET_AUTHORS } from '../queries'
 
 const EditAuthor = () => {
-  const [name, setName] = useState('')
-  const [born, setBorn] = useState('')
-
   const response = useQuery(GET_AUTHORS)
   const [editAuthor] = useMutation(EDIT_AUTHOR)
 
@@ -15,14 +11,25 @@ const EditAuthor = () => {
 
   const submit = async (event) => {
     event.preventDefault()
-
     editAuthor({
-      variables: { name, setBornTo: Number(born) },
-      refetchQueries: [{ query: GET_AUTHORS }],
+      variables: {
+        name: event.target.name.value,
+        setBornTo: Number(event.target.born.value),
+      },
+      update: (cache, response) => {
+        cache.updateQuery({ query: GET_AUTHORS }, ({ allAuthors }) => {
+          return {
+            allAuthors: allAuthors.map((author) =>
+              author.name === response.data.editAuthor.name
+                ? response.data.editAuthor
+                : author
+            ),
+          }
+        })
+      },
     })
-
-    setName('')
-    setBorn('')
+    event.target.name.value = ''
+    event.target.born.value = ''
   }
 
   return (
@@ -31,7 +38,10 @@ const EditAuthor = () => {
       <form onSubmit={submit}>
         <div>
           name
-          <select value={name} onChange={({ target }) => setName(target.value)}>
+          <select name='name' defaultValue=''>
+            <option value='' disabled>
+              select author
+            </option>
             {authors.map((author) => (
               <option key={author.id} value={author.name}>
                 {author.name}
@@ -41,10 +51,7 @@ const EditAuthor = () => {
         </div>
         <div>
           born
-          <input
-            value={born}
-            onChange={({ target }) => setBorn(target.value)}
-          />
+          <input name='born' />
         </div>
         <button type='submit'>update author</button>
       </form>
