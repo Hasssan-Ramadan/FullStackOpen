@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
+import { useSubscription, useApolloClient } from '@apollo/client'
+
+import { BOOK_ADDED, GET_BOOKS, GET_AUTHORS } from './queries'
+
 import Authors from './components/Authors'
 import Books from './components/Books'
 import EditAuthor from './components/EditAuthor'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import { useApolloClient } from '@apollo/client'
 import RecommendedBooks from './components/RecommendedBooks'
 
 const App = () => {
@@ -23,6 +26,36 @@ const App = () => {
     localStorage.clear()
     client.clearStore()
   }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      window.alert(`${addedBook.title} added`)
+
+      for (const genre of [...addedBook.genres, '']) {
+        client.cache.updateQuery(
+          { query: GET_BOOKS, variables: { genre } },
+          ({ allBooks }) => {
+            return {
+              allBooks: allBooks.concat(addedBook),
+            }
+          }
+        )
+      }
+      client.cache.updateQuery({ query: GET_AUTHORS }, ({ allAuthors }) => {
+        if (allAuthors.find((author) => author.name === addedBook.author.name))
+          return {
+            allAuthors: allAuthors.map((author) =>
+              author.name === addedBook.author.name ? addedBook.author : author
+            ),
+          }
+        else
+          return {
+            allAuthors: allAuthors.concat(addedBook.author),
+          }
+      })
+    },
+  })
 
   return (
     <div>

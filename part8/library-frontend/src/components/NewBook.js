@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
-import { ADD_BOOK, GET_BOOKS, GET_AUTHORS } from '../queries'
+import { ADD_BOOK, GET_AUTHORS } from '../queries'
 
 const NewBook = () => {
   const [title, setTitle] = useState('')
@@ -19,36 +19,6 @@ const NewBook = () => {
 
     addBook({
       variables: { title, author, published: Number(published), genres },
-      update: (cache, response) => {
-        for (const genre of [...response.data.addBook.genres, '']) {
-          cache.updateQuery(
-            { query: GET_BOOKS, variables: { genre } },
-            ({ allBooks }) => {
-              return {
-                allBooks: allBooks.concat(response.data.addBook),
-              }
-            }
-          )
-        }
-        cache.updateQuery({ query: GET_AUTHORS }, ({ allAuthors }) => {
-          if (
-            allAuthors.find(
-              (author) => author.name === response.data.addBook.author.name
-            )
-          )
-            return {
-              allAuthors: allAuthors.map((author) =>
-                author.name === response.data.addBook.author.name
-                  ? response.data.addBook.author
-                  : author
-              ),
-            }
-          else
-            return {
-              allAuthors: allAuthors.concat(response.data.addBook.author),
-            }
-        })
-      },
     })
 
     setTitle('')
