@@ -10,15 +10,19 @@ export type Diagnose = {
  latin?: string;
 }
 
-export type Patient = {
- id: string;
- name: string;
- dateOfBirth: string;
- ssn: string;
- gender: Gender;
- occupation: string;
+export interface Entry {
 }
 
-export type PatientWithoutSSN = Omit<Patient, 'ssn'>
+export interface Patient {
+ id: string;
+ name: string;
+ ssn: string;
+ occupation: string;
+ gender: Gender;
+ dateOfBirth: string;
+ entries: Entry[]
+}
+
+export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type newPatient = Omit<Patient, 'id'>

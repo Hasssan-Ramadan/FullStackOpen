@@ -76,4 +76,6 @@ const diagnoses: Diagnose[] = [
  }
 ]
 
-export const getDaignoses = () => diagnoses
+export const getDaignoses = () => {
+ return diagnoses;
+}
